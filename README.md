@@ -67,3 +67,41 @@ src/
 - [ ] Search + filters (size, price, colour, fabric)
 - [ ] Product reviews, SEO metadata, sitemap, analytics
 ```
+
+
+## Hosting on Hostinger at `bhamavision.com/demo` (static files)
+
+Hostinger's file hosting serves static files, so we ship a pre-built static
+export of the site configured for the `/demo` sub-path.
+
+### Rebuild the static bundle (only if you change the code)
+
+```bash
+npm install
+npm run build:static      # BUILD_TARGET=static NEXT_PUBLIC_BASE_PATH=/demo
+```
+
+This writes a plain HTML/CSS/JS site to `out/`. A ready-to-upload
+`bhamavision-demo.zip` (containing a top-level `demo/` folder) is committed at
+the repo root for convenience.
+
+### Upload steps (hPanel File Manager)
+
+1. Download **`bhamavision-demo.zip`** from this repo.
+2. In Hostinger **hPanel → Files → File Manager**, open `public_html`.
+3. **Upload** `bhamavision-demo.zip` into `public_html`.
+4. Right-click the zip → **Extract**. This creates `public_html/demo/`.
+5. Delete the zip (optional) and visit **https://bhamavision.com/demo**.
+
+> The site is prefixed with `basePath: /demo`, so all assets resolve correctly
+> under the sub-path. To host at the domain root instead, rebuild with
+> `NEXT_PUBLIC_BASE_PATH=""` and upload the files to `public_html` directly.
+
+### Notes / limitations of the static build
+
+- Runs on the bundled sample catalogue. The live **Shopify Storefront API**
+  needs a Node server (Vercel), so headless data is not available in the static
+  export — it's ideal for a **demo/preview**.
+- Cart works (client-side, `localStorage`); "Checkout" is a placeholder until
+  Shopify checkout is wired on a server deployment.
+- Product images load from `picsum.photos` (external), so they render anywhere.

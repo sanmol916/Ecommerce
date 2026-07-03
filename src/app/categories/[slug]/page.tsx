@@ -1,9 +1,15 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getCategory, getProductsByCategory } from "@/lib/commerce";
+import { getCategories, getCategory, getProductsByCategory } from "@/lib/commerce";
 import { ProductGrid } from "@/components/product-grid";
 
 type Params = { params: Promise<{ slug: string }> };
+
+// Pre-render a static page for every category (required for static export).
+export async function generateStaticParams() {
+  const categories = await getCategories();
+  return categories.map((c) => ({ slug: c.slug }));
+}
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;

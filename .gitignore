@@ -16,6 +16,8 @@
 # next.js
 /.next/
 /out/
+# static-export staging folder (the downloadable zip is committed instead)
+/demo/
 
 # production
 /build

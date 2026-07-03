@@ -17,6 +17,11 @@ const COLLECTIONS: Record<string, { title: string; blurb: string }> = {
 
 type Params = { params: Promise<{ slug: string }> };
 
+// Pre-render every known collection (required for static export).
+export function generateStaticParams() {
+  return Object.keys(COLLECTIONS).map((slug) => ({ slug }));
+}
+
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
   const meta = COLLECTIONS[slug];

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getProduct, getRelatedProducts } from "@/lib/commerce";
+import { getProduct, getProducts, getRelatedProducts } from "@/lib/commerce";
 import { formatINR, discountPercent } from "@/lib/format";
 import { ProductGallery } from "@/components/product-gallery";
 import { AddToCart } from "@/components/add-to-cart";
@@ -10,6 +10,12 @@ import { ProductCarousel } from "@/components/product-carousel";
 import { SectionHeading } from "@/components/section-heading";
 
 type Params = { params: Promise<{ slug: string }> };
+
+// Pre-render a static page for every product (required for static export).
+export async function generateStaticParams() {
+  const products = await getProducts();
+  return products.map((p) => ({ slug: p.slug }));
+}
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
